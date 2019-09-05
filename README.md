@@ -44,7 +44,7 @@ $ eval $(docker-machine env mybox)
 Also, you should add a route to access containers inside your VM.
 
 ```
-$ sudo route -n add 172.0.0.0/8 $(docker-machine ip $(docker-machine active))
+$ sudo route -n add 172.0.0.0/12 $(docker-machine ip $(docker-machine active))
 ```
 
 ### INSTALL WITH COMPOSER
