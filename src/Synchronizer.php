@@ -18,6 +18,8 @@ class Synchronizer
     private $hostsFile;
     /** @var string */
     private $tld;
+    /** @var bool */
+    private $windows;
 
     /** @var array */
     private $activeContainers = [];
@@ -27,11 +29,12 @@ class Synchronizer
      * @param string $hostsFile
      * @param string $tld
      */
-    public function __construct(Docker $docker, $hostsFile, $tld)
+    public function __construct(Docker $docker, $hostsFile, $tld, $windows)
     {
         $this->docker = $docker;
         $this->hostsFile = $hostsFile;
         $this->tld = $tld;
+        $this->windows = $windows;
     }
 
     public function run()
@@ -119,7 +122,7 @@ class Synchronizer
         // Networks
         if (isset($container['NetworkSettings']['Networks']) && is_array($container['NetworkSettings']['Networks'])) {
             foreach ($container['NetworkSettings']['Networks'] as $networkName => $conf) {
-                $ip = $conf['IPAddress'];
+                $ip = $this->windows ? '127.0.0.1' : $conf['IPAddress'];
 
                 $aliases = isset($conf['Aliases']) && is_array($conf['Aliases']) ? $conf['Aliases'] : [];
                 $aliases[] = substr($container['Name'], 1);

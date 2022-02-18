@@ -30,6 +30,13 @@ class SynchronizeHostsCommand extends Command
                 'The TLD to use',
                 getenv('TLD') ?: '.docker'
             )
+            ->addOption(
+                'windows',
+                'w',
+                InputOption::VALUE_REQUIRED,
+                'Enable Windows support',
+                boolval(getenv('WINDOWS')) || false
+            )
         ;
     }
 
@@ -38,7 +45,8 @@ class SynchronizeHostsCommand extends Command
         $app = new Synchronizer(
             new Docker(),
             $input->getOption('hosts_file'),
-            $input->getOption('tld')
+            $input->getOption('tld'),
+            $input->getOption('windows')
         );
 
         $app->run();
